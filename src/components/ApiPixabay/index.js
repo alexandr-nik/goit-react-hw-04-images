@@ -1,0 +1,1 @@
+export {AxiosPaxabay} from './ApiPixabay'

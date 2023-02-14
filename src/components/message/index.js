@@ -1,0 +1,1 @@
+export {errorMessage, infoMessage} from './message'

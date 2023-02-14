@@ -1,0 +1,6 @@
+.Loader{
+    margin: 0 auto;
+    grid-column: 1 / -1;
+    min-height: 50px;
+    box-shadow: none;
+  }
