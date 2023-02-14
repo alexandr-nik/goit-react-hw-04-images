@@ -1,37 +1,37 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import disableScroll from 'disable-scroll';
 import './Modal.css';
-export class Modal extends Component {
-  closeModalWindow = e => {
+
+export const Modal = ({ alt, src, closeModal }) => {
+  const closeModalWindow = e => {
     if (e.currentTarget === e.target) {
-      this.props.closeModal();
+      closeModal();
     }
   };
-  windowEventListner = e => {
+  const windowEventListner = e => {
     if (e.key === 'Escape') {
-      this.props.closeModal();
+        closeModal();
     }
   };
-  componentDidMount() {
-    window.addEventListener('keydown', this.windowEventListner);
+  useEffect(() => {
+    window.addEventListener('keydown', windowEventListner);
     disableScroll.on();
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.windowEventListner);
-    disableScroll.off();
-  }
-  render() {
-    const { alt, src } = this.props;
-    return (
-      <div className="Overlay" onClick={this.closeModalWindow}>
-        <div className="Modal">
-          <img src={src} alt={alt} />
-        </div>
+    return () => {
+      window.removeEventListener('keydown', windowEventListner);
+      disableScroll.off();
+    };
+  });
+
+  return (
+    <div className="Overlay" onClick={closeModalWindow}>
+      <div className="Modal">
+        <img src={src} alt={alt} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
 Modal.propTypes = {
   alt: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired,

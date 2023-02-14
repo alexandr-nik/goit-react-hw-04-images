@@ -1,53 +1,50 @@
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
-import { Component } from 'react';
-import './Searchbar.css'
+import { useState } from 'react';
+import './Searchbar.css';
 import { errorMessage } from '../message';
 
-export class Searchbar extends Component {
-  state = {
-    find: '',
-  };
-
-   onSubmit = e => {
+export const Searchbar = ({ getFindName }) => {
+  const [find, setFind] = useState('');
+  
+  const onSubmit = e => {
     e.preventDefault();
-     const { find } = this.state; 
-     const query = find.trim();
-      if (query === '') {
+    const query = find.trim();
+    if (query === '') {
       errorMessage('Please enter something');
       return;
     }
-     this.props.getFindName(query);
-     this.setState({ find: '' });   
-  };
-  inputHandle = e => {
-    const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+    getFindName(query);
+    setFind('');
   };
 
-  render() {
-    return (
-      <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.onSubmit}>
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
-          </button>
-          <input
-            className="SearchForm-input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            name="find"
-            value={this.state.find}
-            placeholder="Search images and photos"
-            onChange={this.inputHandle}
-          />
-        </form>
-        <ToastContainer />
-      </header>
-    );
-  }
-}
-Searchbar.propTypes ={
-  getFindName:PropTypes.func.isRequired,
-}
+  const inputHandle = e => {
+    const { value } = e.currentTarget;
+    setFind(value);
+  };
+
+  return (
+    <header className="Searchbar">
+      <form className="SearchForm" onSubmit={onSubmit}>
+        <button type="submit" className="SearchForm-button">
+          <span className="SearchForm-button-label">Search</span>
+        </button>
+        <input
+          className="SearchForm-input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          name="find"
+          value={find}
+          placeholder="Search images and photos"
+          onChange={inputHandle}
+        />
+      </form>
+      <ToastContainer />
+    </header>
+  );
+};
+
+Searchbar.propTypes = {
+  getFindName: PropTypes.func.isRequired,
+};

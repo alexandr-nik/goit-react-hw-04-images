@@ -1,48 +1,41 @@
 import { Modal } from 'components/Modal/Modal';
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './ImageGalleryItem.css';
 
-export class ImageGalleryItem extends Component {
-  state = {
-    index: null,
+export const ImageGalleryItem = ({ galleryList } ) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+ const openModal = index => () => {
+  setActiveIndex(index)
   };
-  openModal = index => () => {
-    this.setState({ index: index });
-  };
-  closeModal() {
-    this.setState({
-      index: null,
-    });
-  }
-  render() {
-    const { galleryList } = this.props;
-    return (
-      <>
-        {galleryList.length >= 1 &&
-          galleryList.map((item, index) => {
-            return (
-              <li key={item.id} className="ImageGalleryItem">
-                <img
+  const closeModal = () =>{
+    setActiveIndex(null)}
+  return (
+    <>
+      {galleryList.length >= 1 &&
+        galleryList.map((item, index) => {
+          return (
+            <li key={item.id} className="ImageGalleryItem">
+              <img
+                alt={item.tags}
+                src={item.webformatURL}
+                className="ImageGalleryItem-image"
+                onClick={openModal(index)}
+              />
+              {activeIndex === index && (
+                <Modal
                   alt={item.tags}
-                  src={item.webformatURL}
-                  className="ImageGalleryItem-image"
-                  onClick={this.openModal(index)}
+                  src={item.largeImageURL}
+                  closeModal={() => closeModal()}
                 />
-                {this.state.index === index && (
-                  <Modal
-                    alt={item.tags}
-                    src={item.largeImageURL}
-                    closeModal={() => this.closeModal()}
-                  />
-                )}
-              </li>
-            );
-          })}
-      </>
-    );
-  }
-}
+              )}
+            </li>
+          );
+        })}
+    </>
+  );
+};
+
 ImageGalleryItem.propTypes = {
   galleryList: PropTypes.arrayOf(
     PropTypes.shape({
