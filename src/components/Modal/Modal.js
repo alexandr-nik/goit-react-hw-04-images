@@ -9,19 +9,19 @@ export const Modal = ({ alt, src, closeModal }) => {
       closeModal();
     }
   };
-  const windowEventListner = e => {
-    if (e.key === 'Escape') {
-        closeModal();
-    }
-  };
   useEffect(() => {
+    const windowEventListner = e => {
+      if (e.key === 'Escape') {
+          closeModal();
+      }
+    };
     window.addEventListener('keydown', windowEventListner);
     disableScroll.on();
     return () => {
       window.removeEventListener('keydown', windowEventListner);
       disableScroll.off();
     };
-  });
+  },[closeModal]);
 
   return (
     <div className="Overlay" onClick={closeModalWindow}>

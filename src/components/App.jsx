@@ -6,7 +6,7 @@ import { ImageGallery } from './ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import { Loader } from './Loader';
 import { Searchbar } from './Searchbar';
-import { errorMessage, infoMessage } from './message';
+import { errorMessage } from './message';
 
 export function App() {
   const [page, setPage] = useState(1);
@@ -25,19 +25,8 @@ export function App() {
     setGalleryList([]);
     setTotalHits(null);
   };
-  useEffect(() => {
-    if (totalHits === null) {
-      return;
-    }
-    if (totalHits === 0) {
-      errorMessage('Sorry. Image not found:(');
-      return;
-    } else {
-      infoMessage(`We found ${totalHits} images`);
-    }
-  }, [totalHits]);
 
-  useEffect(() => {
+   useEffect(() => {
     if (q === '') {
       return;
     }
@@ -50,11 +39,12 @@ export function App() {
         }).then(data => {
           setGalleryList(prev => [...prev, ...data.hits]);
           setTotalHits(data.totalHits);
+          if (data.totalHits === 0) errorMessage('Sorry. Image not found :(');          
         });
       } catch (error) {
         errorMessage(error);
       } finally {
-        setLoader(false);
+         setLoader(false);
       }
     }
     getImages();
